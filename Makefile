@@ -109,4 +109,6 @@ clean:
 	rm -rf $(UPTODATE_FILES) $(EXES) $(PROTO_GOS)
 	go clean ./...
 
-
+clean-vendor:
+	find vendor -type f ! -name '*.go' -a ! -name '*.s' -a ! -name '*.h' -a ! -name '*.proto' -a ! -name LICENSE | xargs -L 10 rm
+	find vendor -type f -name '*_test.go' | xargs -L 10 rm
