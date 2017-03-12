@@ -10,9 +10,9 @@ import (
 
 	"github.com/weaveworks/common/middleware"
 	"github.com/weaveworks/common/server"
-	"github.com/weaveworks/cortex"
 	"github.com/weaveworks/cortex/chunk"
 	"github.com/weaveworks/cortex/ingester"
+	"github.com/weaveworks/cortex/ingester/api"
 	"github.com/weaveworks/cortex/ring"
 	"github.com/weaveworks/cortex/util"
 )
@@ -55,7 +55,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error initializing server: %v", err)
 	}
-	cortex.RegisterIngesterServer(server.GRPC, ingester)
+	api.RegisterIngesterServer(server.GRPC, ingester)
 	server.HTTP.Handle("/ring", registration.Ring)
 	server.HTTP.Path("/ready").Handler(http.HandlerFunc(ingester.ReadinessHandler))
 	server.Run()

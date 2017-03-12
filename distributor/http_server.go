@@ -17,13 +17,13 @@ import (
 	"github.com/prometheus/prometheus/promql"
 
 	"github.com/weaveworks/common/instrument"
-	"github.com/weaveworks/cortex"
+	"github.com/weaveworks/cortex/ingester/api"
 	"github.com/weaveworks/cortex/util"
 )
 
 // PushHandler is a http.Handler which accepts WriteRequests.
 func (d *Distributor) PushHandler(w http.ResponseWriter, r *http.Request) {
-	var req cortex.WriteRequest
+	var req api.WriteRequest
 	if err := ParseProtoRequest(r.Context(), w, r, &req, true); err != nil {
 		log.Errorf(err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)

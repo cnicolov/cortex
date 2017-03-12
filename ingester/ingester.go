@@ -18,8 +18,8 @@ import (
 	"golang.org/x/net/context"
 
 	"github.com/weaveworks/common/user"
-	"github.com/weaveworks/cortex"
 	cortex_chunk "github.com/weaveworks/cortex/chunk"
+	"github.com/weaveworks/cortex/ingester/api"
 	"github.com/weaveworks/cortex/ring"
 	"github.com/weaveworks/cortex/util"
 )
@@ -257,8 +257,8 @@ func (i *Ingester) isReady() bool {
 	return i.ready
 }
 
-// Push implements cortex.IngesterServer
-func (i *Ingester) Push(ctx context.Context, req *cortex.WriteRequest) (*cortex.WriteResponse, error) {
+// Push implements api.IngesterServer
+func (i *Ingester) Push(ctx context.Context, req *api.WriteRequest) (*api.WriteResponse, error) {
 	var lastPartialErr error
 	samples := util.FromWriteRequest(req)
 	for j := range samples {
@@ -271,7 +271,7 @@ func (i *Ingester) Push(ctx context.Context, req *cortex.WriteRequest) (*cortex.
 		}
 	}
 
-	return &cortex.WriteResponse{}, lastPartialErr
+	return &api.WriteResponse{}, lastPartialErr
 }
 
 func (i *Ingester) append(ctx context.Context, sample *model.Sample) error {
@@ -317,7 +317,7 @@ func (i *Ingester) append(ctx context.Context, sample *model.Sample) error {
 }
 
 // Query implements service.IngesterServer
-func (i *Ingester) Query(ctx context.Context, req *cortex.QueryRequest) (*cortex.QueryResponse, error) {
+func (i *Ingester) Query(ctx context.Context, req *api.QueryRequest) (*api.QueryResponse, error) {
 	start, end, matchers, err := util.FromQueryRequest(req)
 	if err != nil {
 		return nil, err
@@ -359,13 +359,13 @@ func (i *Ingester) query(ctx context.Context, from, through model.Time, matchers
 }
 
 // LabelValues returns all label values that are associated with a given label name.
-func (i *Ingester) LabelValues(ctx context.Context, req *cortex.LabelValuesRequest) (*cortex.LabelValuesResponse, error) {
+func (i *Ingester) LabelValues(ctx context.Context, req *api.LabelValuesRequest) (*api.LabelValuesResponse, error) {
 	state, err := i.userStates.getOrCreate(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	resp := &cortex.LabelValuesResponse{}
+	resp := &api.LabelValuesResponse{}
 	for _, v := range state.index.lookupLabelValues(model.LabelName(req.LabelName)) {
 		resp.LabelValues = append(resp.LabelValues, string(v))
 	}
@@ -374,7 +374,7 @@ func (i *Ingester) LabelValues(ctx context.Context, req *cortex.LabelValuesReque
 }
 
 // MetricsForLabelMatchers returns all the metrics which match a set of matchers.
-func (i *Ingester) MetricsForLabelMatchers(ctx context.Context, req *cortex.MetricsForLabelMatchersRequest) (*cortex.MetricsForLabelMatchersResponse, error) {
+func (i *Ingester) MetricsForLabelMatchers(ctx context.Context, req *api.MetricsForLabelMatchersRequest) (*api.MetricsForLabelMatchersResponse, error) {
 	state, err := i.userStates.getOrCreate(ctx)
 	if err != nil {
 		return nil, err
@@ -407,13 +407,13 @@ func (i *Ingester) MetricsForLabelMatchers(ctx context.Context, req *cortex.Metr
 }
 
 // UserStats returns ingestion statistics for the current user.
-func (i *Ingester) UserStats(ctx context.Context, req *cortex.UserStatsRequest) (*cortex.UserStatsResponse, error) {
+func (i *Ingester) UserStats(ctx context.Context, req *api.UserStatsRequest) (*api.UserStatsResponse, error) {
 	state, err := i.userStates.getOrCreate(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	return &cortex.UserStatsResponse{
+	return &api.UserStatsResponse{
 		IngestionRate: state.ingestedSamples.rate(),
 		NumSeries:     uint64(state.fpToSeries.length()),
 	}, nil

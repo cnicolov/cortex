@@ -13,7 +13,7 @@ import (
 	"google.golang.org/grpc"
 
 	"github.com/weaveworks/common/user"
-	"github.com/weaveworks/cortex"
+	"github.com/weaveworks/cortex/ingester/api"
 	"github.com/weaveworks/cortex/ring"
 )
 
@@ -43,27 +43,27 @@ type mockIngester struct {
 	happy bool
 }
 
-func (i mockIngester) Push(ctx context.Context, in *cortex.WriteRequest, opts ...grpc.CallOption) (*cortex.WriteResponse, error) {
+func (i mockIngester) Push(ctx context.Context, in *api.WriteRequest, opts ...grpc.CallOption) (*api.WriteResponse, error) {
 	if !i.happy {
 		return nil, fmt.Errorf("Fail")
 	}
-	return &cortex.WriteResponse{}, nil
+	return &api.WriteResponse{}, nil
 }
 
-func (i mockIngester) Query(ctx context.Context, in *cortex.QueryRequest, opts ...grpc.CallOption) (*cortex.QueryResponse, error) {
+func (i mockIngester) Query(ctx context.Context, in *api.QueryRequest, opts ...grpc.CallOption) (*api.QueryResponse, error) {
 	if !i.happy {
 		return nil, fmt.Errorf("Fail")
 	}
-	return &cortex.QueryResponse{
-		Timeseries: []cortex.TimeSeries{
+	return &api.QueryResponse{
+		Timeseries: []api.TimeSeries{
 			{
-				Labels: []cortex.LabelPair{
+				Labels: []api.LabelPair{
 					{
 						Name:  []byte("__name__"),
 						Value: []byte("foo"),
 					},
 				},
-				Samples: []cortex.Sample{
+				Samples: []api.Sample{
 					{
 						Value:       0,
 						TimestampMs: 0,
@@ -78,15 +78,15 @@ func (i mockIngester) Query(ctx context.Context, in *cortex.QueryRequest, opts .
 	}, nil
 }
 
-func (i mockIngester) LabelValues(ctx context.Context, in *cortex.LabelValuesRequest, opts ...grpc.CallOption) (*cortex.LabelValuesResponse, error) {
+func (i mockIngester) LabelValues(ctx context.Context, in *api.LabelValuesRequest, opts ...grpc.CallOption) (*api.LabelValuesResponse, error) {
 	return nil, nil
 }
 
-func (i mockIngester) UserStats(ctx context.Context, in *cortex.UserStatsRequest, opts ...grpc.CallOption) (*cortex.UserStatsResponse, error) {
+func (i mockIngester) UserStats(ctx context.Context, in *api.UserStatsRequest, opts ...grpc.CallOption) (*api.UserStatsResponse, error) {
 	return nil, nil
 }
 
-func (i mockIngester) MetricsForLabelMatchers(ctx context.Context, in *cortex.MetricsForLabelMatchersRequest, opts ...grpc.CallOption) (*cortex.MetricsForLabelMatchersResponse, error) {
+func (i mockIngester) MetricsForLabelMatchers(ctx context.Context, in *api.MetricsForLabelMatchersRequest, opts ...grpc.CallOption) (*api.MetricsForLabelMatchersResponse, error) {
 	return nil, nil
 }
 
@@ -95,27 +95,27 @@ func TestDistributorPush(t *testing.T) {
 	for i, tc := range []struct {
 		ingesters        []mockIngester
 		samples          int
-		expectedResponse *cortex.WriteResponse
+		expectedResponse *api.WriteResponse
 		expectedError    error
 	}{
 		// A push of no samples shouldn't block or return error, even if ingesters are sad
 		{
 			ingesters:        []mockIngester{{}, {}, {}},
-			expectedResponse: &cortex.WriteResponse{},
+			expectedResponse: &api.WriteResponse{},
 		},
 
 		// A push to 3 happy ingesters should succeed
 		{
 			samples:          10,
 			ingesters:        []mockIngester{{true}, {true}, {true}},
-			expectedResponse: &cortex.WriteResponse{},
+			expectedResponse: &api.WriteResponse{},
 		},
 
 		// A push to 2 happy ingesters should succeed
 		{
 			samples:          10,
 			ingesters:        []mockIngester{{}, {true}, {true}},
-			expectedResponse: &cortex.WriteResponse{},
+			expectedResponse: &api.WriteResponse{},
 		},
 
 		// A push to 1 happy ingesters should fail
@@ -159,7 +159,7 @@ func TestDistributorPush(t *testing.T) {
 				IngestionRateLimit:  10000,
 				IngestionBurstSize:  10000,
 
-				ingesterClientFactory: func(addr string) cortex.IngesterClient {
+				ingesterClientFactory: func(addr string) api.IngesterClient {
 					return ingesters[addr]
 				},
 			}, ring)
@@ -168,16 +168,16 @@ func TestDistributorPush(t *testing.T) {
 			}
 			defer d.Stop()
 
-			request := &cortex.WriteRequest{}
+			request := &api.WriteRequest{}
 			for i := 0; i < tc.samples; i++ {
-				ts := cortex.TimeSeries{
-					Labels: []cortex.LabelPair{
+				ts := api.TimeSeries{
+					Labels: []api.LabelPair{
 						{[]byte("__name__"), []byte("foo")},
 						{[]byte("bar"), []byte("baz")},
 						{[]byte("sample"), []byte(fmt.Sprintf("%d", i))},
 					},
 				}
-				ts.Samples = []cortex.Sample{
+				ts.Samples = []api.Sample{
 					{
 						Value:       float64(i),
 						TimestampMs: int64(i),
@@ -268,7 +268,7 @@ func TestDistributorQuery(t *testing.T) {
 				IngestionRateLimit:  10000,
 				IngestionBurstSize:  10000,
 
-				ingesterClientFactory: func(addr string) cortex.IngesterClient {
+				ingesterClientFactory: func(addr string) api.IngesterClient {
 					return ingesters[addr]
 				},
 			}, ring)
