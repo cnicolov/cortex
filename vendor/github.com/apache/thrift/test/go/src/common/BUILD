@@ -1,0 +1,14 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "client.go",
+        "mock_handler.go",
+        "printing_handler.go",
+        "server.go",
+        "simple_handler.go",
+    ],
+    visibility = ["//visibility:public"],
+    deps = ["//vendor/github.com/golang/mock/gomock:go_default_library"],
+)

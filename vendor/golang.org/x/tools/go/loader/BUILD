@@ -1,0 +1,17 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "cgo.go",
+        "cgo_pkgconfig.go",
+        "doc.go",
+        "loader.go",
+        "util.go",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//vendor/golang.org/x/tools/go/ast/astutil:go_default_library",
+        "//vendor/golang.org/x/tools/go/buildutil:go_default_library",
+    ],
+)

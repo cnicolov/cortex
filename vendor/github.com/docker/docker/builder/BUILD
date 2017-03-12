@@ -1,0 +1,35 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "builder.go",
+        "context.go",
+        "context_unix.go",
+        "dockerignore.go",
+        "git.go",
+        "remote.go",
+        "tarsum.go",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//vendor/github.com/docker/docker/api/types:go_default_library",
+        "//vendor/github.com/docker/docker/api/types/backend:go_default_library",
+        "//vendor/github.com/docker/docker/api/types/container:go_default_library",
+        "//vendor/github.com/docker/docker/builder/dockerignore:go_default_library",
+        "//vendor/github.com/docker/docker/image:go_default_library",
+        "//vendor/github.com/docker/docker/pkg/archive:go_default_library",
+        "//vendor/github.com/docker/docker/pkg/chrootarchive:go_default_library",
+        "//vendor/github.com/docker/docker/pkg/fileutils:go_default_library",
+        "//vendor/github.com/docker/docker/pkg/gitutils:go_default_library",
+        "//vendor/github.com/docker/docker/pkg/httputils:go_default_library",
+        "//vendor/github.com/docker/docker/pkg/ioutils:go_default_library",
+        "//vendor/github.com/docker/docker/pkg/progress:go_default_library",
+        "//vendor/github.com/docker/docker/pkg/streamformatter:go_default_library",
+        "//vendor/github.com/docker/docker/pkg/symlink:go_default_library",
+        "//vendor/github.com/docker/docker/pkg/tarsum:go_default_library",
+        "//vendor/github.com/docker/docker/pkg/urlutil:go_default_library",
+        "//vendor/github.com/docker/docker/reference:go_default_library",
+        "//vendor/golang.org/x/net/context:go_default_library",
+    ],
+)

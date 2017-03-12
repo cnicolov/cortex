@@ -1,0 +1,38 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "client.go",
+        "config.go",
+        "plugin.go",
+        "request.go",
+        "transport.go",
+        "url_utils.go",
+        "urlbackoff.go",
+        "versions.go",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//vendor/github.com/golang/glog:go_default_library",
+        "//vendor/k8s.io/client-go/1.5/pkg/api:go_default_library",
+        "//vendor/k8s.io/client-go/1.5/pkg/api/errors:go_default_library",
+        "//vendor/k8s.io/client-go/1.5/pkg/api/unversioned:go_default_library",
+        "//vendor/k8s.io/client-go/1.5/pkg/api/v1:go_default_library",
+        "//vendor/k8s.io/client-go/1.5/pkg/api/validation/path:go_default_library",
+        "//vendor/k8s.io/client-go/1.5/pkg/fields:go_default_library",
+        "//vendor/k8s.io/client-go/1.5/pkg/labels:go_default_library",
+        "//vendor/k8s.io/client-go/1.5/pkg/runtime:go_default_library",
+        "//vendor/k8s.io/client-go/1.5/pkg/runtime/serializer/streaming:go_default_library",
+        "//vendor/k8s.io/client-go/1.5/pkg/util/cert:go_default_library",
+        "//vendor/k8s.io/client-go/1.5/pkg/util/flowcontrol:go_default_library",
+        "//vendor/k8s.io/client-go/1.5/pkg/util/net:go_default_library",
+        "//vendor/k8s.io/client-go/1.5/pkg/util/sets:go_default_library",
+        "//vendor/k8s.io/client-go/1.5/pkg/version:go_default_library",
+        "//vendor/k8s.io/client-go/1.5/pkg/watch:go_default_library",
+        "//vendor/k8s.io/client-go/1.5/pkg/watch/versioned:go_default_library",
+        "//vendor/k8s.io/client-go/1.5/tools/clientcmd/api:go_default_library",
+        "//vendor/k8s.io/client-go/1.5/tools/metrics:go_default_library",
+        "//vendor/k8s.io/client-go/1.5/transport:go_default_library",
+    ],
+)

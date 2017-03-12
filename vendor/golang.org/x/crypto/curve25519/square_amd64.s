@@ -7,7 +7,7 @@
 
 // +build amd64,!gccgo,!appengine
 
-#include "const_amd64.h"
+#define REDMASK51     0x0007FFFFFFFFFFFF
 
 // func square(out, in *[5]uint64)
 TEXT ·square(SB),7,$0-16

@@ -112,3 +112,9 @@ clean:
 clean-vendor:
 	find vendor -type f ! -name '*.go' -a ! -name '*.s' -a ! -name '*.h' -a ! -name '*.proto' -a ! -name LICENSE | xargs -L 10 rm
 	find vendor -type f -name '*_test.go' | xargs -L 10 rm
+
+update-gazelle:
+	gazelle -go_prefix github.com/weaveworks/cortex -external vendored
+
+blaze:
+	bazel build //cmd/...

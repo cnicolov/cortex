@@ -7,7 +7,7 @@
 
 // +build amd64,!gccgo,!appengine
 
-#include "const_amd64.h"
+#define REDMASK51     0x0007FFFFFFFFFFFF
 
 // func mul(dest, a, b *[5]uint64)
 TEXT ·mul(SB),0,$16-24

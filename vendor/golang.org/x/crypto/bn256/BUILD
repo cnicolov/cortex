@@ -1,0 +1,16 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "bn256.go",
+        "constants.go",
+        "curve.go",
+        "gfp12.go",
+        "gfp2.go",
+        "gfp6.go",
+        "optate.go",
+        "twist.go",
+    ],
+    visibility = ["//visibility:public"],
+)

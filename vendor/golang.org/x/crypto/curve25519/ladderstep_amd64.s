@@ -7,7 +7,7 @@
 
 // +build amd64,!gccgo,!appengine
 
-#include "const_amd64.h"
+#define REDMASK51     0x0007FFFFFFFFFFFF
 
 // func ladderstep(inout *[5][5]uint64)
 TEXT ·ladderstep(SB),0,$296-8

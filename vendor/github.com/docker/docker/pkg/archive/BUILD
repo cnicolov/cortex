@@ -1,0 +1,30 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "archive.go",
+        "archive_other.go",
+        "archive_unix.go",
+        "changes.go",
+        "changes_other.go",
+        "changes_unix.go",
+        "copy.go",
+        "copy_unix.go",
+        "diff.go",
+        "time_unsupported.go",
+        "whiteouts.go",
+        "wrap.go",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//vendor/github.com/Sirupsen/logrus:go_default_library",
+        "//vendor/github.com/docker/docker/pkg/fileutils:go_default_library",
+        "//vendor/github.com/docker/docker/pkg/idtools:go_default_library",
+        "//vendor/github.com/docker/docker/pkg/ioutils:go_default_library",
+        "//vendor/github.com/docker/docker/pkg/pools:go_default_library",
+        "//vendor/github.com/docker/docker/pkg/promise:go_default_library",
+        "//vendor/github.com/docker/docker/pkg/system:go_default_library",
+        "//vendor/github.com/opencontainers/runc/libcontainer/system:go_default_library",
+    ],
+)

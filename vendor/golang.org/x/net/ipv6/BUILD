@@ -1,0 +1,36 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "bpfopt_stub.go",
+        "control.go",
+        "control_rfc2292_unix.go",
+        "control_rfc3542_unix.go",
+        "control_unix.go",
+        "dgramopt_posix.go",
+        "doc.go",
+        "endpoint.go",
+        "genericopt_posix.go",
+        "header.go",
+        "helper.go",
+        "iana.go",
+        "icmp.go",
+        "icmp_bsd.go",
+        "payload.go",
+        "payload_cmsg.go",
+        "sockopt.go",
+        "sockopt_asmreq_posix.go",
+        "sockopt_posix.go",
+        "sockopt_ssmreq_unix.go",
+        "sys_darwin.go",
+        "syscall_unix.go",
+        "zsys_darwin.go",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//vendor/golang.org/x/net/bpf:go_default_library",
+        "//vendor/golang.org/x/net/internal/iana:go_default_library",
+        "//vendor/golang.org/x/net/internal/netreflect:go_default_library",
+    ],
+)

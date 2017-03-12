@@ -1,0 +1,19 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "client.go",
+        "remote_api.go",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//vendor/github.com/golang/protobuf/proto:go_default_library",
+        "//vendor/golang.org/x/net/context:go_default_library",
+        "//vendor/google.golang.org/appengine:go_default_library",
+        "//vendor/google.golang.org/appengine/internal:go_default_library",
+        "//vendor/google.golang.org/appengine/internal/remote_api:go_default_library",
+        "//vendor/google.golang.org/appengine/log:go_default_library",
+        "//vendor/google.golang.org/appengine/user:go_default_library",
+    ],
+)

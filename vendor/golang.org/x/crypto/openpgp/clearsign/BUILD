@@ -1,0 +1,12 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = ["clearsign.go"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//vendor/golang.org/x/crypto/openpgp/armor:go_default_library",
+        "//vendor/golang.org/x/crypto/openpgp/errors:go_default_library",
+        "//vendor/golang.org/x/crypto/openpgp/packet:go_default_library",
+    ],
+)

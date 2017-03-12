@@ -1,0 +1,38 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "cmd.go",
+        "common.go",
+        "deploy.go",
+        "deploy_bundlefile.go",
+        "list.go",
+        "opts.go",
+        "ps.go",
+        "remove.go",
+        "services.go",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//vendor/github.com/docker/docker/api/types:go_default_library",
+        "//vendor/github.com/docker/docker/api/types/filters:go_default_library",
+        "//vendor/github.com/docker/docker/api/types/swarm:go_default_library",
+        "//vendor/github.com/docker/docker/cli:go_default_library",
+        "//vendor/github.com/docker/docker/cli/command:go_default_library",
+        "//vendor/github.com/docker/docker/cli/command/bundlefile:go_default_library",
+        "//vendor/github.com/docker/docker/cli/command/idresolver:go_default_library",
+        "//vendor/github.com/docker/docker/cli/command/secret:go_default_library",
+        "//vendor/github.com/docker/docker/cli/command/service:go_default_library",
+        "//vendor/github.com/docker/docker/cli/command/task:go_default_library",
+        "//vendor/github.com/docker/docker/cli/compose/convert:go_default_library",
+        "//vendor/github.com/docker/docker/cli/compose/loader:go_default_library",
+        "//vendor/github.com/docker/docker/cli/compose/types:go_default_library",
+        "//vendor/github.com/docker/docker/client:go_default_library",
+        "//vendor/github.com/docker/docker/opts:go_default_library",
+        "//vendor/github.com/pkg/errors:go_default_library",
+        "//vendor/github.com/spf13/cobra:go_default_library",
+        "//vendor/github.com/spf13/pflag:go_default_library",
+        "//vendor/golang.org/x/net/context:go_default_library",
+    ],
+)

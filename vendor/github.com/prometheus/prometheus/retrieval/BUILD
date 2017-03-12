@@ -1,0 +1,26 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "scrape.go",
+        "target.go",
+        "targetmanager.go",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//vendor/github.com/prometheus/client_golang/prometheus:go_default_library",
+        "//vendor/github.com/prometheus/common/expfmt:go_default_library",
+        "//vendor/github.com/prometheus/common/log:go_default_library",
+        "//vendor/github.com/prometheus/common/model:go_default_library",
+        "//vendor/github.com/prometheus/common/version:go_default_library",
+        "//vendor/github.com/prometheus/prometheus/config:go_default_library",
+        "//vendor/github.com/prometheus/prometheus/discovery:go_default_library",
+        "//vendor/github.com/prometheus/prometheus/relabel:go_default_library",
+        "//vendor/github.com/prometheus/prometheus/storage:go_default_library",
+        "//vendor/github.com/prometheus/prometheus/storage/local:go_default_library",
+        "//vendor/github.com/prometheus/prometheus/util/httputil:go_default_library",
+        "//vendor/golang.org/x/net/context:go_default_library",
+        "//vendor/golang.org/x/net/context/ctxhttp:go_default_library",
+    ],
+)

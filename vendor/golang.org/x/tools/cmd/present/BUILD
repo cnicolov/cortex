@@ -1,0 +1,24 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "dir.go",
+        "doc.go",
+        "local.go",
+        "play.go",
+        "play_socket.go",
+    ],
+    visibility = ["//visibility:private"],
+    deps = [
+        "//vendor/golang.org/x/tools/godoc/static:go_default_library",
+        "//vendor/golang.org/x/tools/playground/socket:go_default_library",
+        "//vendor/golang.org/x/tools/present:go_default_library",
+    ],
+)
+
+go_binary(
+    name = "present",
+    library = ":go_default_library",
+    visibility = ["//visibility:public"],
+)
