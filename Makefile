@@ -46,7 +46,7 @@ all: $(UPTODATE_FILES)
 test: $(PROTO_GOS)
 
 # And now what goes into each image
-build/$(UPTODATE): build/*
+build-image/$(UPTODATE): build-image/*
 
 # All the boiler plate for building golang follows:
 SUDO := $(shell docker info >/dev/null 2>&1 || echo "sudo -E")
@@ -64,7 +64,7 @@ NETGO_CHECK = @strings $@ | grep cgo_stub\\\.go >/dev/null || { \
 
 ifeq ($(BUILD_IN_CONTAINER),true)
 
-$(EXES) $(PROTO_GOS) lint test shell: build/$(UPTODATE)
+$(EXES) $(PROTO_GOS) lint test shell: build-image/$(UPTODATE)
 	@mkdir -p $(shell pwd)/.pkg
 	$(SUDO) docker run $(RM) -ti \
 		-v $(shell pwd)/.pkg:/go/pkg \
@@ -73,20 +73,20 @@ $(EXES) $(PROTO_GOS) lint test shell: build/$(UPTODATE)
 
 else
 
-$(EXES): build/$(UPTODATE)
+$(EXES): build-image/$(UPTODATE)
 	go build $(GO_FLAGS) -o $@ ./$(@D)
 	$(NETGO_CHECK)
 
-%.pb.go: build/$(UPTODATE)
+%.pb.go: build-image/$(UPTODATE)
 	protoc -I ./vendor:./$(@D) --gogoslick_out=plugins=grpc:./$(@D) ./$(patsubst %.pb.go,%.proto,$@)
 
-lint: build/$(UPTODATE)
+lint: build-image/$(UPTODATE)
 	./tools/lint -notestpackage -ignorespelling queriers -ignorespelling Queriers .
 
-test: build/$(UPTODATE)
+test: build-image/$(UPTODATE)
 	./tools/test -netgo
 
-shell: build/$(UPTODATE)
+shell: build-image/$(UPTODATE)
 	bash
 
 endif
